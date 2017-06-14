@@ -104,5 +104,5 @@ def services():
         return render_template('services.html', runningServList=runningServList, systemdServList=systemdServList, upTime=upTime)
 
 
-if __name__ == "__main__":
-	app.run()
+#if __name__ == "__main__":
+	#app.run(host= '0.0.0.0',port='5000')
