@@ -1,0 +1,14 @@
+{% extends "base.html"%}
+
+{% block content  %}
+
+	<h1 id="headerOne">This is the general info page.</h1>
+	 <table id="infoTable"style="float:left;width: 25%">
+                <tr style="background-color:LimeGreen;color:white"><td>General Info</td></tr>
+                {% for x in getInfo %}
+                <tr>
+                        <td>{{x}}</td>
+                </tr>
+                {% endfor %}
+        </table>
+{% endblock  %}

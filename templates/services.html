@@ -1,0 +1,25 @@
+{% extends "base.html"%}
+
+{% block content  %}
+
+        <h1 id="headerOne">This is the services page. You can view running services and some statistics here.</h1>
+	<table id="servicesTable" style="width: 25%;float:left">
+                <tr style="background-color:LimeGreen;color:white"><td>Running Services</td></tr>
+                {% for x in runningServList %}
+                <tr>
+                        <td>{{x}}</td>
+                </tr>
+                {% endfor %}
+        </table>
+
+	<table id="servicesTable" style="width: 25%">
+                <tr style="background-color:LimeGreen;color:white"><td colSpan="2">Systemd Running Services</td></tr>
+		<tr style="background-color:LimeGreen;color:white"><td>Service Name</td><td>Uptime (HH:MM:SS)</td></tr>
+                {% for x in systemdServList %}
+                <tr>
+                        <td>{{x}}</td><td>{{upTime[loop.index0]}}</td> 
+                </tr>
+                {% endfor %}
+        </table>
+
+{% endblock  %}

@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<link rel= "stylesheet" href= "{{ url_for('static',filename='style.css') }}">
+		<title>Waggle Node Web API</title>
+	</head>
+	
+	<body>
+
+		<div class="navbar">
+		
+		<ul class="navlist"style="list-style-type:none">
+			<li class="navelem"><a href="{{ url_for("home") }}">Home</a></li>
+			<li class="navelem"><a href="{{ url_for("memInfo")  }}">Memory Info</a></li>
+			<li class="navelem"><a href="{{ url_for("generalInfo")  }}">General Info</a></li>
+			<li class="navelem"><a href="{{ url_for("services")  }}">Services</a></li>
+		</ul>
+
+		</div>
+		{% block content  %} {% endblock  %}
+	</body>
+</html>

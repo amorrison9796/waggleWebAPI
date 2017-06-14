@@ -1,0 +1,43 @@
+table, tr, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+}
+
+td{
+        text-align: center;
+}
+
+body{
+	background-color: #DEDEDE;
+}
+.navbar{
+
+        border: 1px solid LimeGreen;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        padding: 5px;
+}
+.navlist{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+.navelem{
+	float: left;
+	border-right: 1px solid #DEDEDE;
+}
+.navelem:last-child{
+	border-right: none;
+}
+.navelem a{
+	text-decoration: none;
+	display: block;
+	padding: 8px;
+	background-color: LimeGreen;
+	color: white;
+}
+.navelem a:hover{
+	background-color: Gray;
+}
