@@ -1,17 +1,17 @@
 {% extends "base.html"%}
 
-{% block content  %}
+{% block content %}
 
-	<h1 onload="alert()" id="headerOne">This is your memory and CPU info.</h1>
+	<h1 onload="reload();" id="headerOne">This is your memory and CPU info.</h1>
 	<table id="infoTable" style="float: left;width: 25%">
 		<tr style="background-color:LimeGreen;color:white"><td>Memory Info</td></tr>
-		{% for x in memList %}
+		{% for x in memoryInfo %}
 		<tr>
 			<td>{{x}}</td>
 		</tr>
 		{% endfor %}
 	</table>
-		
+
 	<table id="cpuTable" style="width:25%">
 		<tr style="background-color:LimeGreen;color:white"><td>CPU Info</td></tr>
 		{% for i in cpuInfo %}
@@ -20,5 +20,14 @@
                 </tr>
                 {% endfor %}
 	</table>
+
+	<script>
+                function init() {
+                        alert('hello');
+                        setInterval(function(){document.getElementById("infoTable").refresh();},1000);
+                }
+		//init();
+        </script>
+
 
 {% endblock  %}

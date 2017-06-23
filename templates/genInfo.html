@@ -5,10 +5,16 @@
 	<h1 id="headerOne">This is the general info page.</h1>
 	 <table id="infoTable"style="float:left;width: 25%">
                 <tr style="background-color:LimeGreen;color:white"><td>General Info</td></tr>
-                {% for x in getInfo %}
+                {% for x in genInfo %}
                 <tr>
                         <td>{{x}}</td>
                 </tr>
                 {% endfor %}
         </table>
+
+	<table style="float:left;width: 25%">
+		<tr style="background-color:LimeGreen;color:white"><td colSpan="2">Machine Up Time</td></tr>
+                <tr><td>Up Time in Seconds</td><td>Up Time Formatted</td></tr>
+		<tr><td>{{upTimeSecs}}</td><td>{{upTimeFormat}}</td></tr>
+	</table>
 {% endblock  %}
