@@ -21,9 +21,8 @@ def sendUpTime():
     data = {}
     
     data.update({nodeUpTime:nodeId})
-    jsonData = json.load(data)
     
-    return Response(json.dumps(jsonData), mimetype='application/json')
+    return Response(json.dumps(data), mimetype='application/json')
 
 def getNodeUpTime():
     #get up time of the current node
@@ -42,12 +41,12 @@ def getNodeId():
     pattern = r"Static\s+hostname:.+\n"
     hostName = re.findall(pattern,hostInfo)
 
-    return hostName[0]
+    return hostName[0].replace("Static hostname: ","").replace("\n","")
 
 
 
 if __name__ == "__main__":
-    app.run(host= '0.0.0.0',port='6000')
+    app.run(host= '0.0.0.0',port='9000')
 
-    
+    startTimeList.append(findTime[0].replace("since ","").replace(";",""))
     
