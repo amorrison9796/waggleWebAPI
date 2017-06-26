@@ -19,7 +19,7 @@ def sendUpTime():
     
     data = {}
     
-    data.update({nodeUpTime:nodeId})
+    data.update({nodeId:nodeUpTime})
     
     return Response(json.dumps(data), mimetype='application/json')
 
