@@ -5,7 +5,6 @@ from datetime import datetime
 import subprocess
 import datetime
 import json
-import html
 import pytz
 import re
 
