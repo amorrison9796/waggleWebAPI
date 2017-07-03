@@ -1,4 +1,4 @@
-# waggleWebAPI ReadMe file
+# waggleWebAPI README
 
 ## Overview of Directories/Files
 
