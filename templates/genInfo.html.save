@@ -19,11 +19,14 @@
 	</table>
 
 	<table style="float:left;width: 25%">
-                <tr style="background-color:LimeGreen;color:white"><td>Conected USB Devices</td></tr>
-		{% for u in usbDevs %}
-                	<tr><td>{{u}}</td></tr>
-		{% endfor %}
+                <tr style="background-color:LimeGreen;color:white"><td colSpan=$
+<table style="float:left;width: 25%">
+                <tr style="background-color:LimeGreen;color:white"><td colSpan="2">Machine Up Time</td></tr>
+                <tr><td>Up Time in Seconds (s)</td><td>Up Time Formatted (DDD days, HH:MM:SS)</td></tr>
+                <tr><td>{{upTimeSecs}}</td><td>{{upTimeFormat}}</td></tr>
+        </table>                <tr><td>Up Time in Seconds (s)</td><td>Up Time Formatted (DDD d$
+                <tr><td>{{upTimeSecs}}</td><td>{{upTimeFormat}}</td></tr>
         </table>
 
-	
+
 {% endblock  %}

@@ -35,14 +35,13 @@ def getNodeUpTime():
     return nodeUpTime
         
 def getNodeId():
+    #get the node ID
     hostInfo = subprocess.check_output('hostnamectl', shell=True)
 
     pattern = r"Static\s+hostname:.+\n"
     hostName = re.findall(pattern,hostInfo)
 
     return hostName[0].replace("Static hostname: ","").replace("\n","")
-
-
 
 #if __name__ == "__main__":
     #app.run(host= '0.0.0.0',port='9000')

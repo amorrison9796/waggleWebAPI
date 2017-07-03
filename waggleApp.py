@@ -4,8 +4,9 @@ from datetime import datetime
 
 import subprocess
 import datetime
-import json
 import html
+import json
+import time
 import pytz
 import re
 
@@ -21,7 +22,9 @@ def generalInfo():
         #pass general info to html template
 	genInfo = getGeneralInfo()
 	nodeUpTime = getNodeUpTime()
-        return render_template('genInfo.html',genInfo=genInfo,upTimeSecs=nodeUpTime[0],upTimeFormat=nodeUpTime[1])
+	usbDevs = getUSBDevs()
+	
+        return render_template('genInfo.html',genInfo=genInfo,upTimeSecs=nodeUpTime[0],upTimeFormat=nodeUpTime[1],usbDevs=usbDevs)
 
 def getGeneralInfo():
         #get general info about machine using 'hostnamectl'
@@ -35,15 +38,24 @@ def getNodeUpTime():
         nodeUpTime = []
         upTimeCmd = subprocess.check_output('cat /proc/uptime', shell=True)
 
-        pattern = r"\d*\.\d*\s+"
+        pattern = r"\d*\.\d*"
         upTime = re.findall(pattern,upTimeCmd)
 
         nodeUpTime.insert(0,str(upTime[0]))
         nodeUpTime.insert(1,str(datetime.timedelta(seconds=int(float(upTime[0])))))
 
         return nodeUpTime
-        
 
+def getUSBDevs():
+        #retrieve the USB devices that are connected to the system
+        getDevs = subprocess.check_output('lsusb',shell=True)
+        pattern = r"Bus\s*\d+\s*Device\s*\d+:\s*ID.+"
+
+        devs = re.findall(pattern,getDevs)
+
+        return devs
+
+#REMOVE THIS EVENTUALLY BUT LEAVE IT IN FOR NOW FOR ZACH
 @app.route("/nodeApi")
 def sendGenInfo():
         #test function that sends general computer info to Zach's API
@@ -91,7 +103,6 @@ def services():
         runningServList = getRunningServices()
         systemdServList = getSystemdServices()
 
-        
         upTime = getUpTime(systemdServList)
 
         return render_template('services.html', runningServList=runningServList, systemdServList=systemdServList, upTime=upTime)
@@ -157,5 +168,25 @@ def getUpTime(systemdServList):
         		upTime.append(None)
         return upTime
 
+@app.route("/metrics")
+def sendMetrics():
+        #function that sends data to sendData.py via response/request
+        nodeID = getNodeID()
+        uptime = getNodeUpTime()[0]
+        
+        jsonData = {}
+        jsonData = {'timestamp':float(time.time()),'nodename':nodeID,'uptime':uptime} #time format can be changed
+
+        return Response(json.dumps(jsonData), mimetype='application/json')
+
+def getNodeID():
+        #function that gets the node ID (name)
+        hostInfo = subprocess.check_output('hostnamectl', shell=True)
+        pattern = r"Static\s+hostname:.+\n"
+        hostName = re.findall(pattern,hostInfo)
+
+        nodeID = hostName[0].replace("Static hostname: ","").replace("\n","")
+        return nodeID
+
 #if __name__ == "__main__":
-	#app.run(host= '0.0.0.0',port='5000')
+	#app.run(host= '0.0.0.0',port='52117')
