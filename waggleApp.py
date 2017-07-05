@@ -33,6 +33,7 @@ def getGeneralInfo():
 
 	genInfoList = re.findall(findPattern,getHostName)
 	return genInfoList
+
 def getNodeUpTime():
         #get up time of the current node
         nodeUpTime = []
@@ -60,7 +61,7 @@ def getUSBDevs():
 def sendGenInfo():
         #test function that sends general computer info to Zach's API
         getInfo = getGeneralInfo()
-        with open('/home/adammorr/API/jsonFile.json') as data:
+        with open('/home/adammorr/genFakeData/jsonFile.json') as data:
                 jsonData = json.load(data)
         return Response(json.dumps(jsonData), mimetype='application/json')
 
@@ -175,7 +176,7 @@ def sendMetrics():
         uptime = getNodeUpTime()[0]
         
         jsonData = {}
-        jsonData = {'timestamp':float(time.time()),'nodename':nodeID,'uptime':uptime} #time format can be changed
+        jsonData = {'timestamp':float(time.time()),'nodename':nodeID,'uptime':uptime} #time format can be changed if needed
 
         return Response(json.dumps(jsonData), mimetype='application/json')
 
