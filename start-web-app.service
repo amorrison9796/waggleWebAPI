@@ -1,0 +1,8 @@
+[Unit]
+Description=start local web app
+
+
+[Service]
+ExecStart=/root/waggleWebAPI/startWebApp.sh
+
+[Install]

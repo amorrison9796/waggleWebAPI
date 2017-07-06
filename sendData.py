@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 
-dir = "/waggleWebAPI/beehive-dev-node-0000-code"
+dir = "/root/waggleWebAPI/beehive-dev-node-0000-code"
 
 sampleRate = 3 #how often the node should be pinged for metrics (in seconds)
 

@@ -1,0 +1,8 @@
+[Unit]
+Description=send node data to beehive dev server
+After=send-node-metrics.service
+
+[Service]
+ExecStart=/root/waggleWebAPI/sendNodeMetrics.sh
+
+[Install]

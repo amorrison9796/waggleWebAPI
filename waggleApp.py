@@ -4,13 +4,12 @@ from datetime import datetime
 
 import subprocess
 import datetime
-import html
 import json
 import time
 import pytz
 import re
 
-app = Flask('waggleWebAPI',static_url_path='')
+app = Flask(__name__,static_url_path='',template_folder="templates")
 
 @app.route("/")
 def home():
@@ -189,5 +188,5 @@ def getNodeID():
         nodeID = hostName[0].replace("Static hostname: ","").replace("\n","")
         return nodeID
 
-#if __name__ == "__main__":
-	#app.run(host= '0.0.0.0',port='52117')
+if __name__ == "__main__":
+	app.run(host='0.0.0.0',port='52117')
