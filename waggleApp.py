@@ -60,7 +60,7 @@ def getUSBDevs():
 def sendGenInfo():
         #test function that sends general computer info to Zach's API
         getInfo = getGeneralInfo()
-        with open('/home/adammorr/genFakeData/jsonFile.json') as data:
+        with open('/home/adammorr/waggleWebAPI/testFiles/genFakeData/jsonFile.json') as data:
                 jsonData = json.load(data)
         return Response(json.dumps(jsonData), mimetype='application/json')
 
