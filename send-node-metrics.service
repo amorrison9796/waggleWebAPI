@@ -1,6 +1,6 @@
 [Unit]
 Description=send node data to beehive dev server
-After=send-node-metrics.service
+After=start-web-app.service
 
 [Service]
 ExecStart=/root/waggleWebAPI/sendNodeMetrics.sh
