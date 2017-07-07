@@ -83,10 +83,10 @@ def getMemInfo():
     #for each line in memInfo, find the given information that fits the regular expression
     for x in range(len(fileData)):
         findPattern = r"[a-zA-Z0-9]+\([a-zA-Z0-9]+\):\s*[0-9]|[a-zA-Z0-9]+:\s*[0-9]"
-            if re.search(findPattern, fileData[x]): #replace re.search() with re.findall()?
-                memInfoList.append(fileData[x])
-            else:
-                memInfoList.append(None)
+        if re.search(findPattern, fileData[x]): #replace re.search() with re.findall()?
+            memInfoList.append(fileData[x])
+        else:
+            memInfoList.append(None)
     return memInfoList
 	
 def getCPUInfo():
