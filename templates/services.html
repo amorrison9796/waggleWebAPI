@@ -1,33 +1,28 @@
 {% extends "base.html"%}
-
 {% block content  %}
-
-
-        <h1 id="headerOne" align="center">Services</h1>
+        <h1 align="center">Services</h1>
 	<h2 align="center">You can view running services and some statistics here.</h2>
-<table class="alignmentTable">
-<tr><td>
-
-	<table class="generalTable">
-                <tr style="background-color: #1098f7;color:white"><td>Running Services</td></tr>
-                {% for x in runningServList %}
-                <tr>
-                        <td>{{x}}</td>
-                </tr>
-                {% endfor %}
-        </table>
-</td>
-<td>
-	<table class="generalTable">
-                <tr style="background-color: #1098f7;color:white"><td colSpan="2">Systemd Running Services</td></tr>
-		<tr style="background-color: #1098f7;color:white"><td>Service Name</td><td>Uptime (DDD days, HH:MM:SS)</td></tr>
-                {% for x in systemdServList %}
-                <tr>
-                        <td>{{x}}</td><td>{{upTime[loop.index0]}}</td> 
-                </tr>
-                {% endfor %}
-        </table>
-
-</td></tr>
-</table>
+	<table class="alignmentTable">
+		<tr><td>
+			<table class="generalTable">
+                		<tr style="background-color: #1098f7;color:white"><td>Running Services</td></tr>
+                		{% for x in runningServList %}
+                		<tr>
+                        		<td>{{x}}</td>
+                		</tr>
+                		{% endfor %}
+        		</table>
+		</td>
+		<td>
+			<table class="generalTable">
+                		<tr class="headerRow"><td colSpan="2">Systemd Running Services</td></tr>
+				<tr class="headerRow"><td>Service Name</td><td>Uptime (DDD days, HH:MM:SS)</td></tr>
+                		{% for x in systemdServList %}
+                		<tr>
+                        		<td>{{x}}</td><td>{{upTime[loop.index0]}}</td> 
+                		</tr>
+                		{% endfor %}
+        		</table>
+		</td></tr>
+	</table>
 {% endblock  %}

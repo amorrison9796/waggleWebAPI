@@ -35,6 +35,7 @@ body{
 .alignmentTable table tr{
 	border: 1px solid #DEDEDE;
         border-collapse: collapse;
+
 }
 
 .alignmentTable table tr:nth-child(even){
@@ -45,10 +46,20 @@ body{
         background-color: white;
 }
 
+.alignmentTable table tr.headerRow{
+	background-color: #1098f7;
+	color: white;
+}
+
 .alignmentTable table td{
         border: 1px solid #DEDEDE;
         border-collapse: collapse;
 	padding: 8px;
+}
+
+.mainLogo{
+	display: block;
+	margin: 0 auto;
 }
 
 .navbar{
@@ -71,7 +82,7 @@ body{
 	float: left;
 }
 
-.nodeid{
+.subtitle{
 	float: right;
 	color: #1098f7;
 	padding-top: 8px;
@@ -100,4 +111,18 @@ body{
 	background-color: #40434e;
 	height: 25%;
 	margin: auto;
+}
+
+.topLogo{
+	width: 32px;
+	height: 32px;
+	border-radius: 50%; 
+	padding: 8px;
+	background-color: white;
+	border: 2px solid white;
+}
+
+.waggleTitle{
+	float: right;
+	color: #1098f7;
 }
