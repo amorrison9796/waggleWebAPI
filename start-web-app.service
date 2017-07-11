@@ -3,6 +3,6 @@ Description=start local web app
 
 
 [Service]
-ExecStart=/root/waggleWebAPI/startWebApp.sh
+ExecStart=/usr/bin/python2.7 /root/waggleWebAPI/waggleApp.py
 
 [Install]
