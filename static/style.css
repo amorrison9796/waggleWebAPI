@@ -1,43 +1,102 @@
-table, tr, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-}
-
 td{
         text-align: center;
 }
 
-body{
-	background-color: #DEDEDE;
+h1{
+        color: #235789;
 }
+
+h2{
+        color: #235789; 
+}
+
+body{
+        width: 75%;
+        margin: auto;
+        background-color: #fafafa;
+}
+
+.alignmentTable{
+        align: center;
+        margin: auto;
+	background-color: none;       
+}
+
+.alignmentTable td{
+        vertical-align: top;
+}
+
+.alignmentTable table{
+	border: 1px solid #DEDEDE;
+        border-collapse: collapse;
+}
+
+.alignmentTable table tr{
+	border: 1px solid #DEDEDE;
+        border-collapse: collapse;
+}
+
+.alignmentTable table tr:nth-child(even){
+        background-color: #DEDEDE;
+}
+
+.alignmentTable table tr:nth-child(odd){
+        background-color: white;
+}
+
+.alignmentTable table td{
+        border: 1px solid #DEDEDE;
+        border-collapse: collapse;
+	padding: 8px;
+}
+
 .navbar{
 
-        border: 1px solid LimeGreen;
+        border: 2px solid #40434e;
         border-top: none;
         border-left: none;
         border-right: none;
-        padding: 5px;
+        padding: 10px;
+	width: 95%;
+	margin: auto;
 }
 .navlist{
 	list-style-type: none;
-	margin: 0;
+	margin: auto;
 	padding: 0;
 	overflow: hidden;
 }
 .navelem{
 	float: left;
-	border-right: 1px solid #DEDEDE;
 }
+
+.nodeid{
+	float: right;
+	color: #1098f7;
+	padding-top: 8px;
+}
+
 .navelem:last-child{
 	border-right: none;
 }
 .navelem a{
-	text-decoration: none;
 	display: block;
-	padding: 8px;
-	background-color: LimeGreen;
-	color: white;
+	text-decoration: none;
+	text-decoration-padding-top: 8px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 8px;
+	padding-bottom: 4px;
+	color: #1098f7;
 }
 .navelem a:hover{
-	background-color: Gray;
+	border-bottom: 2px solid #1098f7;
+	line-height: 1.062;
+}
+
+.topbar{
+	padding: 20px;
+	background-color: #40434e;
+	height: 25%;
+	margin: auto;
 }

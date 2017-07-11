@@ -136,13 +136,13 @@ def generateNodeData(timePeriod,samplePeriod,numNodes,percentFailNodes,fromTime,
     #nodes are pinged for data)
     #Due to rounding errors, some of the lists encounter out of bounds errors; thus, sometimes 1 is subtracted from the period, and
     #sometimes not
+    
     period = 0
     if (float(timePeriod)/float(samplePeriod)) > timePeriod/samplePeriod:
         period = (timePeriod/samplePeriod)
     else:
         period = (timePeriod/samplePeriod)-1
         
-
     #generates a list of dictionaries to hold the uptimes for the amount of times that the nodes are pinged for data
     arrHolder = []
     for i in range(0,period):

@@ -2,25 +2,29 @@
 
 {% block content %}
 
-	<h1 onload="reload();" id="headerOne">This is your memory and CPU info.</h1>
-	<table id="infoTable" style="float: left;width: 25%">
-		<tr style="background-color:LimeGreen;color:white"><td>Memory Info</td></tr>
+	<h1 onload="reload();" id="headerOne" align="center">Memory and CPU Info</h1>
+<table class="alignmentTable">
+<tr><td>
+	<table class="generalTable">
+		<tr style="background-color: #1098f7;color:white"><td>Memory Info</td></tr>
 		{% for x in memoryInfo %}
 		<tr>
 			<td>{{x}}</td>
 		</tr>
 		{% endfor %}
 	</table>
-
-	<table id="cpuTable" style="width:25%">
-		<tr style="background-color:LimeGreen;color:white"><td>CPU Info</td></tr>
+</td>
+<td>
+	<table class="generalTable">
+		<tr style="background-color: #1098f7;color:white"><td>CPU Info</td></tr>
 		{% for i in cpuInfo %}
                 <tr>
                         <td>{{i[0]}}</td>
                 </tr>
                 {% endfor %}
 	</table>
-
+</td></tr>
+</table>
 	<script>
                 function init() {
                         alert('hello');
@@ -28,6 +32,4 @@
                 }
 		//init();
         </script>
-
-
 {% endblock  %}
