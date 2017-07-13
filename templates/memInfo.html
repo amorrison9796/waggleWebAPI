@@ -14,6 +14,17 @@
 		</td>
 		<td>
 			<table class="generalTable">
+				<tr class="headerRow"><td colSpan="2">Disk Info</td></tr>
+				<tr class="headerRow"><td>Current Disk</td><td>Other Disk</td></tr>
+				<tr><td>Name:</td><td>Name:</td></tr>
+				<tr><td>Type:</td><td>Type:</td></tr>
+				<tr><td>Used: 17%</td><td>Used 17%</td></tr>
+				<tr><td>Free: 83%</td><td>Free: 83%</td></tr>
+				<tr><td><canvas id="currDiskChart" width="250" height="250"></canvas></td><td><canvas id="otherDiskChart" width="250" height="250"></canvas></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="generalTable">
 				<tr class="headerRow"><td>CPU Info</td></tr>
 				{% for i in cpuInfo %}
                 		<tr>
@@ -24,10 +35,67 @@
 		</td></tr>
 	</table>
 	<script>
-                function init() {
-                        alert('hello');
-                        setInterval(function(){document.getElementById("infoTable").refresh();},1000);
+                function drawChart() {
+                        //alert('hello');
+                        //setInterval(function(){document.getElementById("infoTable").refresh();},1000);
+			var canvas = document.getElementById('currDiskChart');
+
+			if(canvas.getContext){
+				
+				var ctx = canvas.getContext('2d');
+				
+				ctx.beginPath();
+				ctx.arc(125,125,100,0,360,0);
+				ctx.fillStyle = "#DEDEDE";
+				ctx.fill();
+				
+				ctx.beginPath();
+				ctx.moveTo(125,125);
+				ctx.arc(125, 125, 100, 270*(Math.PI/180), 315*(Math.PI/180));
+				ctx.fillStyle = "#235789";
+				ctx.fill();
+				
+				ctx.beginPath();
+				var x = 125 + (103)*Math.cos(315*(Math.PI/180));
+				var y = 125 + (103)*Math.sin(315*(Math.PI/180));
+				ctx.moveTo(x,y);
+				ctx.lineTo(125,125);
+				ctx.stroke();
+				ctx.fillStyle = "#235789";
+				ctx.font="11px Arial"
+				ctx.fillText("17%",x,y)
+				
+			}
+			
+			canvas = document.getElementById('otherDiskChart');
+
+			if(canvas.getContext){
+
+                                var ctx = canvas.getContext('2d');
+
+                                ctx.beginPath();
+                                ctx.arc(125,125,100,0,360,0);
+                                ctx.fillStyle = "#DEDEDE";
+                                ctx.fill();
+
+                                ctx.beginPath();
+                                ctx.moveTo(125,125);
+                                ctx.arc(125, 125, 100, 270*(Math.PI/180), 315*(Math.PI/180));
+                                ctx.fillStyle = "#235789";
+                                ctx.fill();
+
+                                ctx.beginPath();
+                                var x = 125 + (103)*Math.cos(315*(Math.PI/180));
+                                var y = 125 + (103)*Math.sin(315*(Math.PI/180));
+                                ctx.moveTo(x,y);
+                                ctx.lineTo(125,125);
+                                ctx.stroke();
+                                ctx.fillStyle = "#235789";
+                                ctx.font="11px Arial"
+                                ctx.fillText("17%",x,y)
+
+                        } 
                 }
-		//init();
+		drawChart();
         </script>
 {% endblock  %}

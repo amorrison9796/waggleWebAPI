@@ -56,7 +56,16 @@ body{
         border-collapse: collapse;
 	padding: 8px;
 }
-
+/*
+.diskUsageChart{
+	width: 256px;
+        height: 256px;
+        border-radius: 50%; 
+        padding: 8px;
+        background-color: #DEDEDE;
+        border: 2px solid #DEDEDE;
+}
+*/
 .mainLogo{
 	display: block;
 	margin: 0 auto;
