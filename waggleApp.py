@@ -69,8 +69,9 @@ def memInfo():
     #pass memory and CPU info to html template
     memoryInfo = getMemInfo()
     cpuInfo = getCPUInfo()
-        
-    return render_template('memInfo.html', memoryInfo=memoryInfo, cpuInfo=cpuInfo)
+    diskInfo = getDiskInfo()
+    
+    return render_template('memInfo.html', memoryInfo=memoryInfo, cpuInfo=cpuInfo,diskInfo=diskInfo)
 
 def getMemInfo():
 
@@ -96,8 +97,32 @@ def getCPUInfo():
 
     return cpuInfoList
 def getDiskInfo():
-    pass
-        
+    name = ""
+    typeOf = ""
+    used = ""
+    free = ""
+
+    getInfo = subprocess.check_output('~/waggleWebAPI/detectDiskDevices.sh', shell=True)
+
+    print getInfo
+
+    pattern = r".*memory card not recognized.*"
+    if (re.search(pattern, getInfo)):
+        name = ["test","test2"]
+        typeOf = ["test","test2"]
+        used = ["test","test2"]
+        free = ["test","test2"]
+    else:
+        name = [re.findall(r"CURRENT_DISK_DEVICE_NAME=.*",getInfo),re.findall(r"OTHER_DISK_DEVICE_NAME=.*",getInfo)]
+        typeOf = [re.findall(r"CURRENT_DISK_DEVICE_TYPE=.*",getInfo),re.findall(r"OTHER_DISK_DEVICE_TYPE=.*",getInfo)]
+        used = ["17%","17%"]
+        free = ["83%","83%"]
+
+    diskInfo = [name,typeOf,used,free]
+    #print diskInfo
+    
+    return diskInfo
+ 
 @app.route("/services")
 def services():
     #pass running services, systemd services, and up time info to html template

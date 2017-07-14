@@ -16,10 +16,11 @@
 			<table class="generalTable">
 				<tr class="headerRow"><td colSpan="2">Disk Info</td></tr>
 				<tr class="headerRow"><td>Current Disk</td><td>Other Disk</td></tr>
-				<tr><td>Name:</td><td>Name:</td></tr>
-				<tr><td>Type:</td><td>Type:</td></tr>
-				<tr><td>Used: 17%</td><td>Used 17%</td></tr>
-				<tr><td>Free: 83%</td><td>Free: 83%</td></tr>
+				{% for d in diskInfo %}
+					<tr>
+						<td>{{d[0]}}</td><td>{{d[1]}}</td>
+					</tr>
+				{% endfor  %}
 				<tr><td><canvas id="currDiskChart" width="250" height="250"></canvas></td><td><canvas id="otherDiskChart" width="250" height="250"></canvas></td></tr>
 			</table>
 		</td>
