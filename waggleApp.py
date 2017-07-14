@@ -119,7 +119,7 @@ def getDiskInfo():
         currType = re.findall(r"CURRENT_DISK_DEVICE_TYPE=.*",getInfo)
         otherType = re.findall(r"OTHER_DISK_DEVICE_TYPE=.*",getInfo)
         
-        name = [currDevice[0].replace("CURRENT_DISK_DEVICE_NAME=","Name:"),otherDev[0].replace("OTHER_DISK_DEVICE_NAME=","Name:")]
+        name = [currDev[0].replace("CURRENT_DISK_DEVICE_NAME=","Name:"),otherDev[0].replace("OTHER_DISK_DEVICE_NAME=","Name:")]
         typeOf = [currType[0].replace("CURRENT_DISK_DEVICE_TYPE=","Type:"),otherType[0].replace("OTHER_DISK_DEVICE_TYPE=","Type:")]
         used = ["Used: 17%","Used: 17%"]
         free = ["Free: 83%","Free: 83%"]
