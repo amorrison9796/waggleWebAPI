@@ -205,13 +205,13 @@ def sendMetrics():
     return json.dumps(jsonData)
 
 if __name__ == "__main__":
-    print "getGeneralInfo():","\n",getGeneralInfo(),"\n"
-    print "getNodeUptime():","\n",getNodeUptime(),"\n"
-    print "getUSBDevs():","\n",getUSBDevs(),"\n"
-    print "getMemInfo():","\n",getMemInfo(),"\n"
-    print "getCPUInfo():","\n",getCPUInfo(),"\n"
-    print "getDiskInfo():","\n",getDiskInfo(),"\n"
-    print "getRunningServices():","\n",getRunningServices(),"\n"
+    print "getGeneralInfo():"+"\n"+str(getGeneralInfo())+"\n"
+    print "getNodeUptime():"+"\n"+str(getNodeUptime())+"\n"
+    print "getUSBDevs():"+"\n"+str(getUSBDevs())+"\n"
+    print "getMemInfo():"+"\n"+str(getMemInfo())+"\n"
+    print "getCPUInfo():"+"\n"+str(getCPUInfo())+"\n"
+    print "getDiskInfo():"+"\n"+str(getDiskInfo())+"\n"
+    print "getRunningServices():"+"\n"+str(getRunningServices())+"\n"
     #print "getSystemdServices():","\n",getSystemdServices(),"\n"
-    print "getNodeID():","\n",getNodeID(),"\n"
+    print "getNodeID():"+"\n"+str(getNodeID())+"\n"
     #print "sendMetrics():","\n",sendMetrics(),"\n"
