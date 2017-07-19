@@ -1,7 +1,7 @@
 from flask import Flask, render_template, Response
 import json
 
-from Aggregation import *
+from metrics import *
 
 app = Flask(__name__,static_url_path='',template_folder="templates")
 
@@ -14,10 +14,10 @@ def home():
 def generalInfo():
     #pass general info to html template
     genInfo = getGeneralInfo()
-    nodeUpTime = getNodeUpTime()
+    nodeUptime = getNodeUptime()
     usbDevs = getUSBDevs()
 	
-    return render_template('genInfo.html',genInfo=genInfo,upTimeSecs=nodeUpTime[0],upTimeFormat=nodeUpTime[1],usbDevs=usbDevs)
+    return render_template('genInfo.html',genInfo=genInfo,upTimeSecs=nodeUptime["UptimeSeconds"],upTimeFormat=nodeUptime["UptimeFormatted"],usbDevs=usbDevs)
 
 #REMOVE THIS EVENTUALLY BUT LEAVE IT IN FOR NOW FOR ZACH
 @app.route("/nodeApi")
@@ -41,11 +41,11 @@ def memInfo():
 def services():
     #pass running services, systemd services, and up time info to html template
     runningServList = getRunningServices()
-    systemdServList = getSystemdServices()
+    #systemdServList = getSystemdServices()
 
-    upTime = getUpTime(systemdServList)
+    #upTime = getUpTime(systemdServList)
 
-    return render_template('services.html', runningServList=runningServList, systemdServList=systemdServList, upTime=upTime)
+    return render_template('services.html', runningServList=runningServList)
 
 @app.route("/metrics")
 def sendMetrics():

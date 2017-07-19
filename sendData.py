@@ -4,7 +4,7 @@ import time
 import requests
 from datetime import datetime
 
-from Aggregation import sendMetrics
+from metrics import sendMetrics
 
 dir = "/root/waggleWebAPI/beehive-dev-node-0000-code"
 

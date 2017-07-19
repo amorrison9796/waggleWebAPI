@@ -205,7 +205,7 @@ def generateNodeData(timePeriod,samplePeriod,numNodes,percentFailNodes,fromTime,
     for arr in arrHolder:
         jsonDict[str(time.time() + addSec)] = arr
         addSec = addSec + samplePeriod
-    print jsonDict
+    #print jsonDict
     
     with open('jsonFile.json', 'w') as outfile:  
         json.dump(jsonDict, outfile)
