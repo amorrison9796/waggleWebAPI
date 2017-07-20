@@ -10,9 +10,9 @@ import re
 
 def getGeneralInfo():
     #get general info about node using 'hostnamectl'
-    getHostName = str(subprocess.check_output('hostnamectl', shell=True))
+    getHostName = str(subprocess.check_output('hostnamectl', shell=True).decode('ascii'))
     pattern = r"\s*[a-zA-Z]*:\s*.\n|\s*[a-zA-Z]*\s*[a-zA-Z]*:\s*.*\n"
-
+    print(getHostName)
     info = re.findall(pattern,getHostName)
 
     genInfoList = {}
@@ -61,9 +61,23 @@ def getMemInfo():
     memInfoList = {}
         
     #get info from /proc/meminfo file
+    getInfo = str(subprocess.check_output('cat /proc/meminfo', shell=True).decode('ascii'))
     memFile = open('/proc/meminfo')
-    fileData = memFile.readlines()
-
+    
+    fileData = str(memFile.readlines())
+    fileData = getInfo
+    memFreeRE = r"MemFree:\s*.*\n"
+    #memAvailableRE = r"MemAvailable:\s*.*\n"
+    memTotalRE = r"MemTotal:\s*.*\n"
+   
+    memFreeInfo = re.findall(memFreeRE,fileData)
+    #memAvailableInfo = re.findall(memAvailableRE,fileData)
+    memTotalInfo = re.findall(memTotalRE,fileData)
+    #print(memFreeInfo)
+    #print(memTotalInfo)
+    memFree = re.sub(r"MemFree:\s*","",memFreeInfo[0])
+    #memAvailable = re.sub(r"MemAvailable:\s*","",memAvailableInfo[0])
+    memTotal = re.sub(r"MemTotal:\s*","",memTotalInfo[0])
 
     #for loop limits memInfoList to first 3 metrics but this can be changed
     for i in range(0,3):
@@ -73,8 +87,8 @@ def getMemInfo():
         #print metric
         value = re.findall(valueRE, fileData[i])
         #print value
-        memInfoList.update({metric[0].replace(":","").replace(" ",""):value[0].replace(":","").replace(" ","").replace("\n","")})
-
+        #memInfoList.update({metric[0].replace(":","").replace(" ",""):value[0].replace(":","").replace(" ","").replace("\n","")})
+    memInfoList = {"MemFree":memFree,"MemTotal":memTotal}
     return memInfoList
 
 def getCPUInfo():
@@ -105,7 +119,7 @@ def getCPUInfo():
 
 def getDiskInfo():
     #get information about disks on node
-    getInfo = str(subprocess.check_output('~/waggleWebAPI/detectDiskDevices.sh', shell=True))
+    getInfo = str(subprocess.check_output('~/waggleWebAPI/detectDiskDevices.sh', shell=True).decode('ascii'))
 
     pattern = r".*memory card not recognized.*"
     if (re.search(pattern, getInfo)):
@@ -117,10 +131,10 @@ def getDiskInfo():
         currentDiskFree = "test"
         currentDiskUsage = "test"
     else:
-        currDev = str(re.findall(r"CURRENT_DISK_DEVICE_NAME=.*",getInfo))
-        otherDev = str(re.findall(r"OTHER_DISK_DEVICE_NAME=.*",getInfo))
-        currType = str(re.findall(r"CURRENT_DISK_DEVICE_TYPE=.*",getInfo))
-        otherType = str(re.findall(r"OTHER_DISK_DEVICE_TYPE=.*",getInfo))
+        currDev = re.findall(r"CURRENT_DISK_DEVICE_NAME=.*",getInfo)
+        otherDev = re.findall(r"OTHER_DISK_DEVICE_NAME=.*",getInfo)
+        currType = re.findall(r"CURRENT_DISK_DEVICE_TYPE=.*",getInfo)
+        otherType = re.findall(r"OTHER_DISK_DEVICE_TYPE=.*",getInfo)
 
         currDiskName = currDev[0].replace("CURRENT_DISK_DEVICE_NAME=","")
         otherDiskName = otherDev[0].replace("OTHER_DISK_DEVICE_NAME=","")
