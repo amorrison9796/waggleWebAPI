@@ -187,13 +187,15 @@ def getRunningServices():
     for i in runningServices:
         getStatus = "systemctl status " + str(i)
         active = r"\s*Active:\s*.*"
-        time = r"since\s.*;"
+        time = r"since\s*[a-zA-Z]*\s*[0-9]*-[0-9]*-[0-9]*\s*[0-9]*:[0-9]*:[0-9]*\s*[a-zA-Z]*;"
         
         #retreive the status of each service
         status = str(subprocess.check_output(getStatus,shell=True))
+        #print (status)
                 
         #parse out the line containing "Active: " and parse out the start time of the service
         findActive = re.findall(active,status)
+        
         findTime = re.findall(time,findActive[0])
         
         #Format the service start time and put it in UTC
@@ -218,7 +220,7 @@ def getSystemdServices(): #to be deprecated
 
 def getNodeID():
     #get the node ID (name)
-    hostInfo = str(subprocess.check_output('hostnamectl', shell=True))
+    hostInfo = str(subprocess.check_output('hostnamectl', shell=True).decode('ascii'))
     pattern = r"Static\s+hostname:.+\n"
     hostName = re.findall(pattern,hostInfo)
 
