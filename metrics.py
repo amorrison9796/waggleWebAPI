@@ -12,7 +12,6 @@ def getGeneralInfo():
     #get general info about node using 'hostnamectl'
     getHostName = str(subprocess.check_output('hostnamectl', shell=True).decode('ascii'))
     pattern = r"\s*[a-zA-Z]*:\s*.\n|\s*[a-zA-Z]*\s*[a-zA-Z]*:\s*.*\n"
-    #print(getHostName)
     info = re.findall(pattern,getHostName)
 
     genInfoList = {}
@@ -78,22 +77,12 @@ def getMemInfo():
     memFreeInfo = re.findall(memFreeRE,fileData)
     #memAvailableInfo = re.findall(memAvailableRE,fileData)
     memTotalInfo = re.findall(memTotalRE,fileData)
-    #print(memFreeInfo)
-    #print(memTotalInfo)
+
     memFree = re.sub(r"MemFree:\s*","",memFreeInfo[0])
     #memAvailable = re.sub(r"MemAvailable:\s*","",memAvailableInfo[0])
     memTotal = re.sub(r"MemTotal:\s*","",memTotalInfo[0])
-
-    #for loop limits memInfoList to first 3 metrics but this can be changed
-    for i in range(0,3):
-        metricRE = r".*:"
-        valueRE = r":.*\n"
-        metric = re.findall(metricRE, fileData[i])
-        #print metric
-        value = re.findall(valueRE, fileData[i])
-        #print value
-        #memInfoList.update({metric[0].replace(":","").replace(" ",""):value[0].replace(":","").replace(" ","").replace("\n","")})
     memInfoList = {"MemFree":memFree,"MemTotal":memTotal}
+        
     return memInfoList
 
 def getCPUInfo():
@@ -112,8 +101,9 @@ def getCPUInfo():
         cpuCores = re.sub(r"cpu cores\s*:\s*", "", cpuInfo)
         vendorId = re.sub(r"vendor_id\s*:\s*", "", vendorInfo)
         modelName = re.sub(r"model name\s*:\s*", "", modelInfo)
-
+        
         cpuInfo = {"CPUCores":cpuCores,"VendorID":vendorId,"ModelName":modelName}
+        
     elif re.findall(r"Processor\s*:\s*.*",getInfo):
         procInfo = re.findall(r"Processor\s*:\s*.*",getInfo)
 
@@ -122,28 +112,15 @@ def getCPUInfo():
 
         cpuInfo = {"Processor":str(proc)}
 
-##  coreRE = r"cpu cores\s*:.*"
-##  vendorRE = r"vendor_id\s*:.*"
-##  modelRE = r"model name\s*:.*"
-
-##  vendorInfo = str(re.search(vendorRE,getInfo).group(0))
-##  cpuInfo = str(re.search(coreRE,getInfo).group(0))
-##  modelInfo = str(re.search(modelRE,getInfo).group(0))
-
-##  cpuCores = re.sub(r"cpu cores\s*:\s*", "", cpuInfo)
-##  vendorId = re.sub(r"vendor_id\s*:\s*", "", vendorInfo)
-##  modelName = re.sub(r"model name\s*:\s*", "", modelInfo)
-
-##  cpuInfo = {"CPUCores":"","VendorID":"","ModelName":""}
-
     return cpuInfo
 
 def getDiskInfo():
     #get information about disks on node
-    getInfo = str(subprocess.check_output('~/waggleWebAPI/detectDiskDevices.sh', shell=True).decode('ascii'))
-
+    getDevices = str(subprocess.check_output('~/waggleWebAPI/detectDiskDevices.sh', shell=True).decode('ascii'))
+    #getUsage = str(subprocess.check_output('df -k |grep sda2',shell=True).decode('ascii'))
+    
     pattern = r".*memory card not recognized.*"
-    if (re.search(pattern, getInfo)):
+    if (re.search(pattern, getDevices)):
         currDiskName = "test"
         otherDiskName = "test"
         currDiskType = "test"
@@ -152,10 +129,10 @@ def getDiskInfo():
         currentDiskFree = "test"
         currentDiskUsage = "test"
     else:
-        currDev = re.findall(r"CURRENT_DISK_DEVICE_NAME=.*",getInfo)
-        otherDev = re.findall(r"OTHER_DISK_DEVICE_NAME=.*",getInfo)
-        currType = re.findall(r"CURRENT_DISK_DEVICE_TYPE=.*",getInfo)
-        otherType = re.findall(r"OTHER_DISK_DEVICE_TYPE=.*",getInfo)
+        currDev = re.findall(r"CURRENT_DISK_DEVICE_NAME=.*",getDevices)
+        otherDev = re.findall(r"OTHER_DISK_DEVICE_NAME=.*",getDevices)
+        currType = re.findall(r"CURRENT_DISK_DEVICE_TYPE=.*",getDevices)
+        otherType = re.findall(r"OTHER_DISK_DEVICE_TYPE=.*",getDevices)
 
         currDiskName = currDev[0].replace("CURRENT_DISK_DEVICE_NAME=","")
         otherDiskName = otherDev[0].replace("OTHER_DISK_DEVICE_NAME=","")
@@ -191,7 +168,6 @@ def getRunningServices():
         
         #retreive the status of each service
         status = str(subprocess.check_output(getStatus,shell=True))
-        #print (status)
                 
         #parse out the line containing "Active: " and parse out the start time of the service
         findActive = re.findall(active,status)
