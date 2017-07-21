@@ -115,10 +115,30 @@ def getCPUInfo():
     return cpuInfo
 
 def getDiskInfo():
+    mountedDevs = []
     #get information about disks on node
     getDevices = str(subprocess.check_output('~/waggleWebAPI/detectDiskDevices.sh', shell=True).decode('ascii'))
     #getUsage = str(subprocess.check_output('df -k |grep sda2',shell=True).decode('ascii'))
-    
+    devs = str(subprocess.check_output("mount | grep 'on /' |cut -f 1 -d ' ' | grep -o '/dev/mmcblk[0-1]p[0-2]'",shell=True).decode('ascii'))
+    mountedDevs = re.findall(r"/dev/mmcblk[0-1]p[0-2]",devs)
+##  print (mountedDevs)
+
+##    if len(mountedDevs) < 2:    
+##        if re.search(r"/dev/mmcblk0p1",str(mountedDevs[0])):
+##            #try: mount mmcblk0p2
+##            #except: error in getDiskInfo() in metrics: unable to mount secondary partition
+##        elif re.search(r"/dev/mmcblk0p2",str(mountedDevs[0]))
+##              #mount mmcblk0p1
+##        elif re.search(r"/dev/mmcblk1p1")
+##            dsfdf
+##        elif dfsdfsdf
+##            dfasdf
+##        else:
+##            #try: mount a partition
+##            #except: error: no partitions available'''
+
+    getUsage = str(subprocess.check_output("df -k|grep /dev/mmcblk",shell=True).decode('ascii'))
+##  print("getUsage:"), print(getUsage)
     pattern = r".*memory card not recognized.*"
     if (re.search(pattern, getDevices)):
         currDiskName = "test"
@@ -138,12 +158,22 @@ def getDiskInfo():
         otherDiskName = otherDev[0].replace("OTHER_DISK_DEVICE_NAME=","")
         currDiskType = currType[0].replace("CURRENT_DISK_DEVICE_TYPE=","")
         otherDiskType = otherType[0].replace("OTHER_DISK_DEVICE_TYPE=","")
+        
+        diskInfoStr = "df -k |grep /dev/" + currDiskName + "p2" #need to change this eventually - can't guarantee that the p2 partition will be the primary partition
+        getUsage = str(subprocess.check_output(diskInfoStr,shell=True).decode('ascii'))
+##      print ("getUsage:"), print(getUsage)
+        
+        used = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $3}'",shell=True).decode('ascii'))
+        total = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $2}'",shell=True).decode('ascii'))
+        available = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $4}'",shell=True).decode('ascii'))
+        usage = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $5}'",shell=True).decode('ascii'))
+#       print("used: "),print(used), print("total: "),print(total),print("available: "), print(available),print("usage: "),print(usage)
 
-        currentDiskUsed = "to be implemented"
-        currentDiskFree = "to be implemented"
-        currentDiskUsage = "to be implemented"
+        currentDiskUsed = (float(used) * float(1024)) * float(10**-9)
+        currentDiskFree = (float(available) * float(1024)) * float(10**-9)
+        currentDiskUsage = usage
 
-    diskInfo = {"CurrentDiskName":currDiskName,"OtherDiskName":otherDiskName,"CurrentDiskType":currDiskType,"OtherDiskType":otherDiskType,"CurrentDiskUsed":currentDiskUsed,"CurrentDiskFree":currentDiskFree,"CurrentDiskUsage":currentDiskUsage}
+    diskInfo = {"CurrentDiskName":currDiskName,"OtherDiskName":otherDiskName,"CurrentDiskType":currDiskType,"OtherDiskType":otherDiskType,"CurrentDiskUsed":str(currentDiskUsed)+"GB","CurrentDiskFree":str(currentDiskFree)+"GB","CurrentDiskUsage":str(currentDiskUsage)}
     return diskInfo
 
 def getRunningServices():
