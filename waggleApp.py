@@ -34,8 +34,14 @@ def memInfo():
     memoryInfo = getMemInfo()
     cpuInfo = getCPUInfo()
     diskInfo = getDiskInfo()
+    diskUsage = diskInfo['CurrentDiskUsage']
+
+    if diskUsage != "test":
+        usage = int(diskUsage.replace("%",""))
+    else:
+        usage = 17
     
-    return render_template('memInfo.html', memoryInfo=memoryInfo, cpuInfo=cpuInfo,diskInfo=diskInfo)
+    return render_template('memInfo.html', memoryInfo=memoryInfo, cpuInfo=cpuInfo,diskInfo=diskInfo, usage=usage)
 
 @app.route("/services")
 def services():

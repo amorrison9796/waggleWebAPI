@@ -52,19 +52,19 @@
 				
 				ctx.beginPath();
 				ctx.moveTo(125,125);
-				ctx.arc(125, 125, 100, 270*(Math.PI/180), 315*(Math.PI/180));
+				ctx.arc(125, 125, 100, 270*(Math.PI/180), (270 + ({{usage}}*360)/100)*(Math.PI/180));
 				ctx.fillStyle = "#235789";
 				ctx.fill();
 				
 				ctx.beginPath();
-				var x = 125 + (103)*Math.cos(315*(Math.PI/180));
-				var y = 125 + (103)*Math.sin(315*(Math.PI/180));
+				var x = 125 + (103)*Math.cos((270 + ({{usage}}*360)/100)*(Math.PI/180));
+				var y = 125 + (103)*Math.sin((270 + ({{usage}}*360)/100)*(Math.PI/180));
 				ctx.moveTo(x,y);
 				ctx.lineTo(125,125);
 				ctx.stroke();
 				ctx.fillStyle = "#235789";
 				ctx.font="11px Arial"
-				ctx.fillText("17%",x,y)
+				ctx.fillText({{usage}}+"%",x,y)
 				
 			} 
                 }
