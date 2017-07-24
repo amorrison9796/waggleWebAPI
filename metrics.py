@@ -134,7 +134,7 @@ def getDiskInfo():
         otherDev = re.findall(r"OTHER_DISK_DEVICE_NAME=.*",getDevices)
         currType = re.findall(r"CURRENT_DISK_DEVICE_TYPE=.*",getDevices)
         otherType = re.findall(r"OTHER_DISK_DEVICE_TYPE=.*",getDevices)
-##      print(currDev,otherDev,currType,otherType)
+
         currDiskName = currDev[0].replace("CURRENT_DISK_DEVICE_NAME=","")
         otherDiskName = otherDev[0].replace("OTHER_DISK_DEVICE_NAME=","")
         currDiskType = currType[0].replace("CURRENT_DISK_DEVICE_TYPE=","")
@@ -161,19 +161,17 @@ def getDiskInfo():
             currPart = mountedDevs[0]
             
         #getUsage = str(subprocess.check_output("df -k|grep /dev/mmcblk",shell=True).decode('ascii'))
-##      print("currPart"),print(currPart),print("mountedDevs"),print(mountedDevs)
+
         diskInfoStr = "df -k |grep " + currPart #need to change this eventually - can't guarantee that the p2 partition will be the primary partition
         getUsage = str(subprocess.check_output(diskInfoStr,shell=True).decode('ascii'))
 ##      print ("getUsage:"), print(getUsage)
-    
-        used = str(subprocess.check_output("df -k | grep " + currPart + " | awk '{print $3}'",shell=True).decode('ascii'))
-        total = str(subprocess.check_output("df -k | grep " + currPart + " | awk '{print $2}'",shell=True).decode('ascii'))
-        available = str(subprocess.check_output("df -k | grep " + currPart + " | awk '{print $4}'",shell=True).decode('ascii'))
-        usage = str(subprocess.check_output("df -k | grep " + currPart + "| awk '{print $5}'",shell=True).decode('ascii'))
+        
+        used = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $3}'",shell=True).decode('ascii'))
+        total = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $2}'",shell=True).decode('ascii'))
+        available = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $4}'",shell=True).decode('ascii'))
+        usage = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $5}'",shell=True).decode('ascii'))
 #       print("used: "),print(used), print("total: "),print(total),print("available: "), print(available),print("usage: "),print(usage)
 
-        used = used.replace("\n","")
-        available = available.replace("\n","")
         currentDiskUsed = (float(used) * float(1024)) * float(10**-9)
         currentDiskFree = (float(available) * float(1024)) * float(10**-9)
         currentDiskUsage = usage
