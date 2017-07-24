@@ -118,25 +118,7 @@ def getDiskInfo():
     mountedDevs = []
     #get information about disks on node
     getDevices = str(subprocess.check_output('~/waggleWebAPI/detectDiskDevices.sh', shell=True).decode('ascii'))
-    #getUsage = str(subprocess.check_output('df -k |grep sda2',shell=True).decode('ascii'))
-    
-##  print (mountedDevs)
 
-##    if len(mountedDevs) < 2:    
-##        if re.search(r"/dev/mmcblk0p1",str(mountedDevs[0])):
-##            #try: mount mmcblk0p2
-##            #except: error in getDiskInfo() in metrics: unable to mount secondary partition
-##        elif re.search(r"/dev/mmcblk0p2",str(mountedDevs[0]))
-##              #mount mmcblk0p1
-##        elif re.search(r"/dev/mmcblk1p1")
-##            dsfdf
-##        elif dfsdfsdf
-##            dfasdf
-##        else:
-##            #try: mount a partition
-##            #except: error: no partitions available'''
-
-##  print("getUsage:"), print(getUsage)
     pattern = r".*memory card not recognized.*"
     if (re.search(pattern, getDevices)):
         currDiskName = "test"
@@ -161,9 +143,22 @@ def getDiskInfo():
 
         devs = str(subprocess.check_output("mount | grep 'on /' |cut -f 1 -d ' ' | grep -o '/dev/mmcblk[0-1]p[0-2]'",shell=True).decode('ascii'))
         mountedDevs = re.findall(r"/dev/mmcblk[0-1]p[0-2]",devs)
-        getUsage = str(subprocess.check_output("df -k|grep /dev/mmcblk",shell=True).decode('ascii'))
+        if (len(mountedDevs) > 1):
+            part1 = "df -k | grep" + mountedDevs[0] " | awk '{print $2}'"
+            part2 = "df -k | grep" + mountedDevs[1] " | awk '{print $2}'"
+            part1Size = str(subprocess.check_output(part1,shell=True).decode('ascii'))
+            part2Size = str(subprocess.check_output(part2,shell=True).decode('ascii'))
+
+            if int(part1Size) > int(part2Size):
+                currPart = mountedDevs[0]
+            else:
+                currPart = mountedDevs[1]
+        else:
+            currPart = mountedDevs[0]
+            
+        #getUsage = str(subprocess.check_output("df -k|grep /dev/mmcblk",shell=True).decode('ascii'))
         
-        diskInfoStr = "df -k |grep /dev/" + currDiskName + "p2" #need to change this eventually - can't guarantee that the p2 partition will be the primary partition
+        diskInfoStr = "df -k |grep /dev/" + currPart #need to change this eventually - can't guarantee that the p2 partition will be the primary partition
         getUsage = str(subprocess.check_output(diskInfoStr,shell=True).decode('ascii'))
 ##      print ("getUsage:"), print(getUsage)
         
