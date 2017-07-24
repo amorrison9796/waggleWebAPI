@@ -118,7 +118,6 @@ def getDiskInfo():
     mountedDevs = []
     #get information about disks on node
     getDevices = str(subprocess.check_output('~/waggleWebAPI/detectDiskDevices.sh', shell=True).decode('ascii'))
-
     pattern = r".*memory card not recognized.*"
     if (re.search(pattern, getDevices)):
         currDiskName = "test"
@@ -135,7 +134,7 @@ def getDiskInfo():
         otherDev = re.findall(r"OTHER_DISK_DEVICE_NAME=.*",getDevices)
         currType = re.findall(r"CURRENT_DISK_DEVICE_TYPE=.*",getDevices)
         otherType = re.findall(r"OTHER_DISK_DEVICE_TYPE=.*",getDevices)
-
+##      print(currDev,otherDev,currType,otherType)
         currDiskName = currDev[0].replace("CURRENT_DISK_DEVICE_NAME=","")
         otherDiskName = otherDev[0].replace("OTHER_DISK_DEVICE_NAME=","")
         currDiskType = currType[0].replace("CURRENT_DISK_DEVICE_TYPE=","")
@@ -144,10 +143,15 @@ def getDiskInfo():
         devs = str(subprocess.check_output("mount | grep 'on /' |cut -f 1 -d ' ' | grep -o '/dev/mmcblk[0-1]p[0-2]'",shell=True).decode('ascii'))
         mountedDevs = re.findall(r"/dev/mmcblk[0-1]p[0-2]",devs)
         if (len(mountedDevs) > 1):
-            part1 = "df -k | grep" + mountedDevs[0] " | awk '{print $2}'"
-            part2 = "df -k | grep" + mountedDevs[1] " | awk '{print $2}'"
+            part1 = "df -k | grep " + mountedDevs[0] + " | awk '{print $2}'"
+            part2 = "df -k | grep " + mountedDevs[1] + " | awk '{print $2}'"
             part1Size = str(subprocess.check_output(part1,shell=True).decode('ascii'))
             part2Size = str(subprocess.check_output(part2,shell=True).decode('ascii'))
+
+            if part1Size == "" or part1Size == " ":
+                part1Size = int("0")
+            if part2Size == "" or part2Size == " ":
+                part2Size = int("0")
 
             if int(part1Size) > int(part2Size):
                 currPart = mountedDevs[0]
@@ -157,17 +161,19 @@ def getDiskInfo():
             currPart = mountedDevs[0]
             
         #getUsage = str(subprocess.check_output("df -k|grep /dev/mmcblk",shell=True).decode('ascii'))
-        
-        diskInfoStr = "df -k |grep /dev/" + currPart #need to change this eventually - can't guarantee that the p2 partition will be the primary partition
+##      print("currPart"),print(currPart),print("mountedDevs"),print(mountedDevs)
+        diskInfoStr = "df -k |grep " + currPart #need to change this eventually - can't guarantee that the p2 partition will be the primary partition
         getUsage = str(subprocess.check_output(diskInfoStr,shell=True).decode('ascii'))
 ##      print ("getUsage:"), print(getUsage)
-        
-        used = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $3}'",shell=True).decode('ascii'))
-        total = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $2}'",shell=True).decode('ascii'))
-        available = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $4}'",shell=True).decode('ascii'))
-        usage = str(subprocess.check_output("df -k | grep /dev/mmcblk | awk '{print $5}'",shell=True).decode('ascii'))
+    
+        used = str(subprocess.check_output("df -k | grep " + currPart + " | awk '{print $3}'",shell=True).decode('ascii'))
+        total = str(subprocess.check_output("df -k | grep " + currPart + " | awk '{print $2}'",shell=True).decode('ascii'))
+        available = str(subprocess.check_output("df -k | grep " + currPart + " | awk '{print $4}'",shell=True).decode('ascii'))
+        usage = str(subprocess.check_output("df -k | grep " + currPart + "| awk '{print $5}'",shell=True).decode('ascii'))
 #       print("used: "),print(used), print("total: "),print(total),print("available: "), print(available),print("usage: "),print(usage)
 
+        used = used.replace("\n","")
+        available = available.replace("\n","")
         currentDiskUsed = (float(used) * float(1024)) * float(10**-9)
         currentDiskFree = (float(available) * float(1024)) * float(10**-9)
         currentDiskUsage = usage
