@@ -219,16 +219,6 @@ def getRunningServices():
   
     return services
 
-def getSystemdServices(): #to be deprecated
-    getInfo = str(subprocess.check_output('systemctl|grep running',shell=True))
-
-    getSystemdServices = r"systemd-.*\.service"
-
-    #All running services with systemd as the first word
-    systemdServices = str(re.findall(getSystemdServices,getInfo))
-
-    return systemdServices
-
 def getNodeID():
     #get the node ID (name)
     hostInfo = str(subprocess.check_output('hostnamectl', shell=True).decode('ascii'))
@@ -260,7 +250,6 @@ if __name__ == "__main__":
     print ("getCPUInfo():"+"\n"+str(getCPUInfo())+"\n")
     print ("getDiskInfo():"+"\n"+str(getDiskInfo())+"\n")
     print ("getRunningServices():"+"\n"+str(getRunningServices())+"\n")
-    #print ("getSystemdServices():","\n",getSystemdServices(),"\n")
     print ("getNodeID():"+"\n"+str(getNodeID())+"\n")
     #print ("sendMetrics():","\n",sendMetrics(),"\n")
 
