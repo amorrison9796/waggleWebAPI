@@ -9,10 +9,11 @@ from metrics import sendMetrics, getGeneralInfo
 sampleRate = 3 #how often the node should be pinged for metrics (in seconds)
 genInfo = getGeneralInfo()
 
-if (genInfo['Chassis'] == 'desktop'):
-    dir = "/home/adammorr/waggleWebAPI/beehive-dev-node-0000-code"
-else:
+if genInfo['Architecture'] == 'arm':
     dir = "/home/waggle/waggleWebAPI/beehive-dev-node-0000-code"
+else:
+    dir = "/home/adammorr/waggleWebAPI/beehive-dev-node-0000-code"
+    
 
 credentials = pika.credentials.PlainCredentials('node', 'waggle')
 
@@ -48,7 +49,7 @@ properties = pika.BasicProperties(
 while 1:
     time.sleep(sampleRate)
     jsonData = sendMetrics()
-    #print str(jsonData)
+    print (str(jsonData))
     channel.basic_publish(exchange='node-metrics', 
                     routing_key='', 
                     body=str(jsonData), 
