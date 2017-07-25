@@ -13,6 +13,7 @@ def home():
 @app.route("/generalInfo")
 def generalInfo():
     #pass general info to html template
+    
     genInfo = getGeneralInfo()
     nodeUptime = getNodeUptime()
     usbDevs = getUSBDevs()
@@ -23,9 +24,12 @@ def generalInfo():
 @app.route("/nodeApi")
 def sendGenInfo():
     #test function that sends general computer info to Zach's API
+    
     getInfo = getGeneralInfo()
+    
     with open('/home/adammorr/waggleWebAPI/testFiles/genFakeData/jsonFile.json') as data:
         jsonData = json.load(data)
+        
     return Response(json.dumps(jsonData), mimetype='application/json')
 
 @app.route("/memInfo")
@@ -46,16 +50,14 @@ def memInfo():
 @app.route("/services")
 def services():
     #pass running services, systemd services, and up time info to html template
+    
     runningServList = getRunningServices()
-    #systemdServList = getSystemdServices()
-
-    #upTime = getUpTime(systemdServList)
-
     return render_template('services.html', runningServList=runningServList)
 
 @app.route("/metrics")
 def sendMetrics():
     #function that sends data to sendData.py via response/request
+    
     nodeID = getNodeID()
     uptime = getNodeUpTime()[0]
         

@@ -17,6 +17,11 @@ body{
 	font-family: Arial Narrow, sans-serif;
 }
 
+.active{
+	border-bottom: 2px solid #1098f7;
+        line-height: 1.062;
+}
+
 .alignmentTable{
         align: center;
         margin: auto;
