@@ -8,6 +8,12 @@ import time
 import pytz
 import re
 
+
+def readfile(filename):
+    with open(filename, 'r') as f:
+        return f.read()
+
+
 def getGeneralInfo():
     #get general info about node using 'hostnamectl'
 
@@ -34,23 +40,18 @@ def getGeneralInfo():
     #return general info about node as dictionary
     return genInfoList
 
+
 def getNodeUptime():
-    #get uptime of node
-    nodeUptime = {}
+    uptimeCmd = readfile('/proc/uptime')
 
-    #get the uptime of node using the 'uptime' file located in the 'proc' directory
-    uptimeCmd = str(subprocess.check_output('cat /proc/uptime', shell=True))
+    # find all occurences of numbers from upTimeCmd; the first one will be the uptime of the node and the second is ignored
+    uptime = re.findall(r'\d*\.\d*', uptimeCmd)
 
-    #find all occurences of numbers from upTimeCmd; the first one will be the uptime of the node and the second is ignored
-    pattern = r"\d*\.\d*"
-    uptime = re.findall(pattern,uptimeCmd)
-    
-    #update the nodeUptime dictionary with the node uptime in seconds and in a user-friendy format
-    nodeUptime.update({"UptimeSeconds":uptime[0]})
-    nodeUptime.update({"UptimeFormatted":str(datetime.timedelta(seconds=int(float(uptime[0]))))})
+    return {
+        'UptimeSeconds': uptime[0],
+        'UptimeFormatted': str(datetime.timedelta(seconds=int(float(uptime[0])))),
+    }
 
-    #return uptime of node as dictionary
-    return nodeUptime
 
 def getUSBDevs():
     #get USB devices that are connected to node
@@ -73,18 +74,19 @@ def getUSBDevs():
 
         #update the dictioary with the next USB device and replace the colon with ""
         devs.update({metric:value[0].replace(": ","")})
-        
+
     #return USB devices as dictionary
     return devs
+
 
 def getMemInfo():
     #get memory (RAM) info from node
     memInfoList = {}
-        
+
     #get memory info from /proc/meminfo file
     getInfo = str(subprocess.check_output('cat /proc/meminfo', shell=True).decode('ascii'))
 
-    #RE's for total memory and free memory 
+    #RE's for total memory and free memory
     memFreeRE = r"MemFree:\s*.*\n"
     memTotalRE = r"MemTotal:\s*.*\n"
 
@@ -98,8 +100,9 @@ def getMemInfo():
 
     #return metrics as a dictionary
     memInfoList = {"MemFree":memFree,"MemTotal":memTotal}
-        
+
     return memInfoList
+
 
 def getCPUInfo():
     #get CPU info from node
@@ -123,7 +126,7 @@ def getCPUInfo():
 
         #add metrics to the dictionary
         cpuInfo = {"CPUCores":cpuCores,"VendorID":vendorId,"ModelName":modelName}
-        
+
     elif re.findall(r"Processor\s*:\s*.*",getInfo):
         #if on a node, only find the processor name (more metrics can be grabbed if needed)
         procInfo = re.findall(r"Processor\s*:\s*.*",getInfo)
@@ -136,6 +139,7 @@ def getCPUInfo():
 
     #return CPU info as a dictionary
     return cpuInfo
+
 
 def getDiskInfo():
     mountedDevs = []
@@ -158,7 +162,7 @@ def getDiskInfo():
 
         #add metrics to dictionary
         diskInfo = {"CurrentDiskName":currDiskName,"OtherDiskName":otherDiskName,"CurrentDiskType":currDiskType,"OtherDiskType":otherDiskType,"CurrentDiskUsed":str(currentDiskUsed),"CurrentDiskFree":str(currentDiskFree),"CurrentDiskUsage":str(currentDiskUsage)}
-        
+
     else:
         #if on a node, the detectDiskDevices.sh script will return these four metrics, among others
         currDev = re.findall(r"CURRENT_DISK_DEVICE_NAME=.*",getDevices)
@@ -175,10 +179,10 @@ def getDiskInfo():
         #find the disk/partition that the node is currently booted from
         devs = str(subprocess.check_output("mount | grep 'on /' |cut -f 1 -d ' ' | grep -o '/dev/mmcblk[0-1]p[0-2]'",shell=True).decode('ascii'))
         mountedDevs = re.findall(r"/dev/mmcblk[0-1]p[0-2]",devs)
-        
+
         # assumes only ONE partition from ONE boot media is mounted; if this changes, there will be errors
-        currPart = mountedDevs[0] 
-            
+        currPart = mountedDevs[0]
+
         #get and parse out each disk usage metric using 'df' command
         used = str(subprocess.check_output("df -k | grep " + currPart + " | awk '{print $3}'",shell=True).decode('ascii'))
         total = str(subprocess.check_output("df -k | grep " + currPart + " | awk '{print $2}'",shell=True).decode('ascii'))
@@ -195,6 +199,7 @@ def getDiskInfo():
 
     #retunr disk info as a dictionary
     return diskInfo
+
 
 def getRunningServices():
     #get running services on node and get their uptimes
@@ -215,23 +220,24 @@ def getRunningServices():
         getStatus = "systemctl status " + str(i)
         active = r"\s*Active:\s*.*"
         time = r"since\s*[a-zA-Z]*\s*[0-9]*-[0-9]*-[0-9]*\s*[0-9]*:[0-9]*:[0-9]*\s*[a-zA-Z]*;"
-        
+
         #retreive the status of each service
         status = str(subprocess.check_output(getStatus,shell=True))
-                
+
         #parse out the line containing "Active: " and parse out the start time of the service
         findActive = re.findall(active,status)
         findTime = re.findall(time,findActive[0])
-        
+
         #Format the service start time and put it in UTC
         ufStartTime = parse(findTime[0].replace("since ","").replace(";",""))
         startTime = ufStartTime.astimezone(pytz.timezone("UTC"))
-           
+
         #Subtract the two values to get the run time of the process and add the service to the dictionary
         uptime = str(currTime - startTime)
         services.update({i:uptime})
-  
+
     return services
+
 
 def getNodeID():
     #get the node ID (name)
@@ -249,29 +255,22 @@ def getNodeID():
 
     return nodeID
 
-def sendMetrics():
-    #function that returns JSON containing every metric (used by sendData.py)
-    nodeID = getNodeID()
-    uptime = getNodeUptime()
-    genInfo = getGeneralInfo()
-    usbDevs = getUSBDevs()
-    memInfo = getMemInfo()
-    cpuInfo = getCPUInfo()
-    diskInfo = getDiskInfo()
-    services = getRunningServices()
-    
-    #timestamp format can be changed if needed
-    jsonData = {'Timestamp':float(time.time()),'Node Name':nodeID,'Uptime':uptime,'General Info':genInfo,'Memory Info':memInfo,'CPU Info':cpuInfo,'Disk Info':diskInfo,'Services':services,'USB Devices':usbDevs,}
-    
-    return json.dumps(jsonData)
 
-if __name__ == "__main__":
-    print ("getGeneralInfo():"+"\n"+str(getGeneralInfo())+"\n")
-    print ("getNodeUptime():"+"\n"+str(getNodeUptime())+"\n")
-    print ("getUSBDevs():"+"\n"+str(getUSBDevs())+"\n")
-    print ("getMemInfo():"+"\n"+str(getMemInfo())+"\n")
-    print ("getCPUInfo():"+"\n"+str(getCPUInfo())+"\n")
-    print ("getDiskInfo():"+"\n"+str(getDiskInfo())+"\n")
-    print ("getRunningServices():"+"\n"+str(getRunningServices())+"\n")
-    print ("getNodeID():"+"\n"+str(getNodeID())+"\n")
-    print ("sendMetrics():","\n",str(sendMetrics()),"\n")
+def sendMetrics():
+    return json.dumps({
+        'Timestamp': time.time(),  # NOTE May want "human time format"?
+        'Node Name': getNodeID(),
+        'Uptime': getNodeUptime(),
+        'General Info': getGeneralInfo(),
+        'Memory Info': getMemInfo(),
+        'CPU Info': getCPUInfo(),
+        'Disk Info': getDiskInfo(),
+        'Services': getRunningServices(),
+        'USB Devices': getUSBDevs(),
+    })
+
+
+if __name__ == '__main__':
+    for key, val in sorted(sendMetrics().items()):
+        print(key)
+        print(val)
