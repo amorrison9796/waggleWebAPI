@@ -4,20 +4,22 @@ import time
 import requests
 from datetime import datetime
 
-from metrics import sendMetrics
-
-dir = "/root/waggleWebAPI/beehive-dev-node-0000-code"
+from metrics import sendMetrics, getGeneralInfo
 
 sampleRate = 3 #how often the node should be pinged for metrics (in seconds)
+genInfo = getGeneralInfo()
 
-#addr = "http://0.0.0.0:52117/metrics"
+if (genInfo['Chassis'] == 'desktop'):
+    dir = "/home/adammorr/waggleWebAPI/beehive-dev-node-0000-code"
+else:
+    dir = "/home/waggle/waggleWebAPI/beehive-dev-node-0000-code"
 
 credentials = pika.credentials.PlainCredentials('node', 'waggle')
 
 ssl_options={'ca_certs' : dir + "/cacert.pem",
              'certfile' : dir + "/node/cert.pem",
              'keyfile'  : dir + "/node/key.pem"}
-#print 'ssl_options = ', ssl_options
+#print ('ssl_options = ', ssl_options)
 
 params = pika.ConnectionParameters(
                 host="10.10.10.5", 
@@ -27,14 +29,13 @@ params = pika.ConnectionParameters(
                 ssl_options=ssl_options,
                 retry_delay=10,
                 socket_timeout=10)
-#print 'params = {}'.format(params)
+#print ('params = {}'.format(params))
 
 connection = pika.BlockingConnection(params)
-#print 'connection = {}'.format(connection)
+#print ('connection = {}'.format(connection))
 
 channel = connection.channel()
-#print 'channel = {}'.format(channel)
-
+#print ('channel = {}'.format(channel))
 
 properties = pika.BasicProperties(
             headers = {
@@ -42,18 +43,14 @@ properties = pika.BasicProperties(
                 'reply_to' : "0000020000000000"},
             timestamp=int(time.time()),
             reply_to="0000020000000000")
-#print 'properties = {}'.format(properties)
+#print ('properties = {}'.format(properties))
 
 while 1:
     time.sleep(sampleRate)
-
-    #req = requests.get(addr)
-    #jsonData = req.json()
     jsonData = sendMetrics()
     #print str(jsonData)
     channel.basic_publish(exchange='node-metrics', 
                     routing_key='', 
                     body=str(jsonData), 
                     properties=properties)
-    print json
 

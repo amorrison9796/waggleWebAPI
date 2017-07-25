@@ -67,4 +67,5 @@ def sendMetrics():
     return Response(json.dumps(jsonData), mimetype='application/json')
 
 if __name__ == "__main__":
-    app.run(host='10.31.81.10',port='52117')
+    #app.run(host='10.31.81.10',port='52117')
+    app.run(host='0.0.0.0',port='52117')

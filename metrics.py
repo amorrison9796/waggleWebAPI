@@ -249,15 +249,20 @@ def getNodeID():
 
     return nodeID
 
-def sendMetrics(): #possibly becoming deprecated
-    #function that sends data to sendData.py via response/request
+def sendMetrics():
+    #function that returns JSON containing every metric (used by sendData.py)
     nodeID = getNodeID()
-    uptime = getNodeUpTime()[0]
+    uptime = getNodeUptime()
+    genInfo = getGeneralInfo()
+    usbDevs = getUSBDevs()
+    memInfo = getMemInfo()
+    cpuInfo = getCPUInfo()
+    diskInfo = getDiskInfo()
+    services = getRunningServices()
     
-    jsonData = {}
-    jsonData = {'timestamp':float(time.time()),'nodename':nodeID,'uptime':uptime} #time format can be changed if needed
-
-    #print json.dumps(jsonData)
+    #timestamp format can be changed if needed
+    jsonData = {'Timestamp':float(time.time()),'Node Name':nodeID,'Uptime':uptime,'General Info':genInfo,'Memory Info':memInfo,'CPU Info':cpuInfo,'Disk Info':diskInfo,'Services':services,'USB Devices':usbDevs,}
+    
     return json.dumps(jsonData)
 
 if __name__ == "__main__":
@@ -269,4 +274,4 @@ if __name__ == "__main__":
     print ("getDiskInfo():"+"\n"+str(getDiskInfo())+"\n")
     print ("getRunningServices():"+"\n"+str(getRunningServices())+"\n")
     print ("getNodeID():"+"\n"+str(getNodeID())+"\n")
-    #print ("sendMetrics():","\n",sendMetrics(),"\n")
+    print ("sendMetrics():","\n",str(sendMetrics()),"\n")
