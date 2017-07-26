@@ -274,6 +274,6 @@ def sendMetrics():
 
 
 if __name__ == '__main__':
-    for key, val in sorted(sendMetrics().items()):
+    for key, val in sorted(json.loads(sendMetrics()).items()):
         print(key)
         print(val)
