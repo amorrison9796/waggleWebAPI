@@ -222,8 +222,11 @@ def getRunningServices():
         time = r"since\s*[a-zA-Z]*\s*[0-9]*-[0-9]*-[0-9]*\s*[0-9]*:[0-9]*:[0-9]*\s*[a-zA-Z]*;"
 
         #retreive the status of each service
-        status = str(subprocess.check_output(getStatus,shell=True))
-
+        try:
+            status = str(subprocess.check_output(getStatus,shell=True))
+        except:
+            print("Error in getRunningServices() in metrics.py: Service call '"+getStatus+"' returned error.")
+            
         #parse out the line containing "Active: " and parse out the start time of the service
         findActive = re.findall(active,status)
         findTime = re.findall(time,findActive[0])
