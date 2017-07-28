@@ -11,8 +11,8 @@ pip install --upgrade pip
 pip install pytz
 pip install flask
 
-cp send-node-metrics.service /etc/systemd/system
-cp start-web-app.service /etc/systemd/system
+cp ./waggleWebAPI/send-node-metrics.service /etc/systemd/system
+cp ./waggleWebAPI/start-web-app.service /etc/systemd/system
 
 echo "Done with all the installs, rebooting now." 
 sleep 5
