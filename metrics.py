@@ -146,7 +146,7 @@ def getDiskInfo():
     #get information about disks on node
 
     #run the detectDiskDevices.sh script located in current directory to detect which media the node is booted from
-    getDevices = str(subprocess.check_output('~/waggleWebAPI/detectDiskDevices.sh', shell=True).decode('ascii'))
+    getDevices = str(subprocess.check_output('/root/waggleWebAPI/detectDiskDevices.sh', shell=True).decode('ascii'))
     pattern = r".*memory card not recognized.*"
 
     #if/else statement that determines if on a node, or on a desktop for testing
