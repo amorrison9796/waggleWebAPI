@@ -14,6 +14,4 @@ pip install flask
 cp ./waggleWebAPI/send-node-metrics.service /etc/systemd/system
 cp ./waggleWebAPI/start-web-app.service /etc/systemd/system
 
-echo "Done with all the installs, rebooting now." 
-sleep 5
-reboot
+systemctl enable --now send-node-metrics.service
