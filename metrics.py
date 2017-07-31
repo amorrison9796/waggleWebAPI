@@ -265,7 +265,7 @@ def getNodeID():
 
 def sendMetrics():
     return json.dumps({
-        'Timestamp': int((float(time.time()))*1000),  #prints in milliseconds - NOTE May want "human time format"?
+        'Timestamp': int(datetime.datetime.utcnow().timestamp() * 1000),  #prints in milliseconds - NOTE May want "human time format"?
         'Node Name': getNodeID(),
         'Uptime': getNodeUptime(),
         'General Info': getGeneralInfo(),
