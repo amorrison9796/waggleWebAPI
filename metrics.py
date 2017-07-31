@@ -98,6 +98,10 @@ def getMemInfo():
     memFree = re.sub(r"MemFree:\s*","",memFreeInfo[0])
     memTotal = re.sub(r"MemTotal:\s*","",memTotalInfo[0])
 
+    #remove "\n" from both metrics
+    memFree = memFree.replace("\n","")
+    memTotal = memTotal.replace("\n","")
+
     #return metrics as a dictionary
     memInfoList = {"MemFree":memFree,"MemTotal":memTotal}
 
@@ -261,7 +265,7 @@ def getNodeID():
 
 def sendMetrics():
     return json.dumps({
-        'Timestamp': time.time(),  # NOTE May want "human time format"?
+        'Timestamp': int((float(time.time()))*1000),  #prints in milliseconds - NOTE May want "human time format"?
         'Node Name': getNodeID(),
         'Uptime': getNodeUptime(),
         'General Info': getGeneralInfo(),
