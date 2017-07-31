@@ -42,7 +42,7 @@ properties = pika.BasicProperties(
             headers = {
                 'value' : 80, 
                 'reply_to' : "0000020000000000"},
-            timestamp=int(time.time()),
+            timestamp=int(datetime.datetime.utcnow().timestamp() * 1000),
             reply_to="0000020000000000")
 #print ('properties = {}'.format(properties))
 
