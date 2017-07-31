@@ -196,7 +196,7 @@ def getDiskInfo():
         #format the values to be read as Gigabytes rather than bytes
         currentDiskUsed = (float(used) * float(1024)) * float(10**-9)
         currentDiskFree = (float(available) * float(1024)) * float(10**-9)
-        currentDiskUsage = usage
+        currentDiskUsage = usage.replace("\n","")
 
         #add metrics to the dictionary
         diskInfo = {"CurrentDiskName":currDiskName,"OtherDiskName":otherDiskName,"CurrentDiskType":currDiskType,"OtherDiskType":otherDiskType,"CurrentDiskUsed":str(currentDiskUsed)+"GB","CurrentDiskFree":str(currentDiskFree)+"GB","CurrentDiskUsage":str(currentDiskUsage)}
