@@ -2,7 +2,7 @@ import json
 import pika
 import time
 import requests
-from datetime import datetime
+import datetime
 
 from metrics import sendMetrics, getGeneralInfo
 
