@@ -27,20 +27,37 @@ In order to install this API on a Node, there are several steps that need to be 
 ### Installation Steps
 **Note:** Some commands may require super user `sudo` at beginning
 
-1. The first step in installation is to run the following two commands: `apt-get update` to update the OS and `apt-get          install python-pika python-requests git python-dateutil curl python-pip` to install git, curl, and the necessary python      modules.
+1. The first step in installation is to run the following two commands: `apt-get update` to update the OS and 
+   `apt-get install python-pika python-requests git python-dateutil curl python-pip` to install git, curl, and the necessary    python modules.
 
 2. Run each of these commands:
    `export LC_ALL="en_US.UTF-8"`
    `export LC_CTYPE="en_US.UTF-8"`
    `dpkg-reconfigure locales`
-
+   to change locales so that the code will run correctly.
    When given a GUI with a list of locales when running the `dpkg-reconfigure locales` command, select "en_US.UTF-8 UTF-8"
 
 3. Then, create a directory where you want the API to be installed by running `mkdir` followed by the directory name
 
-4. Run `git clone` followed by the full URL of this GitHub directory inside the directory created in step 2 to download all      files from GitHub.
+4. Run `git clone` followed by the full URL of this GitHub directory inside the directory created in the previous step to        download all files from GitHub.
 
 5. Next, run each of these commands to finish installing the necessary python modules
    `pip install --upgrade pip`,`pip install pytz`, and `pip install flask` 
    
-6. 
+6. Run `cp /PATH_TO_DIRECTPRY/send-node-metrics.service /etc/systemd/system` and 
+   `cp /PATH_TO_DIRECTORY/start-web-app.service /etc/systemd/system` to copy the service files from the git directory to        the /etc/systemd/system directory so that they start their respective Python files on somputer boot up.
+   
+7. Run `systemctl daemon-reload` to tell the computer that there are new service files to be run at startup.
+
+8. Run `systemctl enable --now send-node-metrics.service` and `systemctl enable --now start-web-app.service.` to enable the      services.
+
+9. Run `nano metrics.py` to edit 'metrics.py' (if nano isn't installed, install it by running `apt-get install nano`)
+
+10. In 'metrics.py' in the getDiskInfo() function, there is a command that should be, or look similar to: 
+   `getDevices = str(subprocess.check_output('~/waggleWebAPI/detectDiskDevices.sh', shell=True).decode('ascii'))`
+   Change the path in the parentheses of the `subprocess.check_output()` to the path of the `detectDiskDevices.sh` where the    git repo was cloned (should still be the current directory you are in). Save the file and exit nano by typing ctrl-o, then    ctrl-x.
+   
+11. Run `nano send-node-metrics.service` and change the line that looks like: 
+    `ExecStart=/usr/bin/python2.7 /root/waggleWebAPI/sendData.py` so that the path to 'sendData.py' is correct. Save and         exit.
+
+12. Repeat step 11 for `start-web-app.service` so that the path to 'waggleApp.py' is correct. Save and exit.
