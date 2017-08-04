@@ -61,3 +61,10 @@ In order to install this API on a Node, there are several steps that need to be 
     `ExecStart=/usr/bin/python2.7 /root/waggleWebAPI/sendData.py` so that the path to 'sendData.py' is correct. Save and         exit.
 
 12. Repeat step 11 for `start-web-app.service` so that the path to 'waggleApp.py' is correct. Save and exit.
+
+13. Run `nano sendData.py` and change the 'dir' variable at the beginning of the code to the path to the                         beehive-dev-node-0000-code directory.
+
+14. Restart the computer and everything should be working!
+
+
+Ideally: install.sh would work, way to set locales w/o graphical user interface, dirs for services, sendData.py, and metrics.py would be set in install script
