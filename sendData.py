@@ -10,10 +10,10 @@ from metrics import sendMetrics, getGeneralInfo
 sampleRate = 1 #how often the node should be pinged for metrics (in seconds)
 genInfo = getGeneralInfo()
 
-if genInfo['Architecture'] == 'arm':
-    dir = "/home/waggle/waggleWebAPI/beehive-dev-node-0000-code"
-else:
-    dir = "/home/adammorr/waggleWebAPI/beehive-dev-node-0000-code"
+###if genInfo['Architecture'] == 'arm':
+dir = "/home/waggle/waggleWebAPI/beehive-dev-node-0000-code"
+###else:
+    ###dir = "/home/adammorr/waggleWebAPI/beehive-dev-node-0000-code"
     
 
 credentials = pika.credentials.PlainCredentials('node', 'waggle')
